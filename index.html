@@ -34,7 +34,7 @@
         _.style.backgroundImage = `url(${imgUrl})`;
         slider.max = imageWidth - viewportWidth;
         slider.addEventListener('input', () => {
-            _.style.backgroundPosition = `-${parseInt(slider.value)}px 0`;
+            _.style.backgroundPosition = `${-parseInt(slider.value)}px 0`;
         });
     </script>
 </body>
