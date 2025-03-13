@@ -1,41 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>Parallax 16:9</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100dvh;
-            background: no-repeat fixed cover 0 0;
-            transition: background-position 0.3s ease;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Animated Parallax (16:9 Image)</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100dvh;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: 0 0;
+      transition: background-position 0.3s ease;
+
+      input {
+        position: fixed;
+        bottom: 5dvmin;
+        left: 5dvmin;
+        width: 90dvmin;
+
+        @media(orientation:landscape) {
+          left: calc(calc(100dvw - 100dvh) / 2);
         }
-        input {
-            position: fixed;
-            bottom: 5dvmin;
-            left: 5dvmin;
-            width: 90dvmin;
-        }
-    </style>
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <input type="range" min="0" value="0">
-    <script>
-        const viewportHeight = innerHeight * devicePixelRatio;
-        const viewportWidth = innerWidth * devicePixelRatio;
-        const aspectRatio = 16 / 9;
-        const imageWidth = viewportHeight * aspectRatio;
-        const imgUrl = `https://picsum.photos/id/18/${Math.floor(imageWidth)}/${Math.floor(viewportHeight)}.webp`;
-        const _ = document.body;
-        const slider = _.firstElementChild;
-        _.style.backgroundImage = `url(${imgUrl})`;
-        slider.max = imageWidth - viewportWidth;
-        slider.addEventListener('input', () => {
-            _.style.backgroundPosition = `${-parseInt(slider.value)}px 0`;
-        });
-    </script>
+  <input type="range" min="0" value="0">
+  <script>
+    const viewportHeight = Math.floor(innerHeight * devicePixelRatio);
+    const aspectRatio = 16 / 9;
+    const isPortrait = innerHeight - innerWidth > 0;
+    const imageWidth = Math.floor(viewportHeight * aspectRatio);
+    const imageURL = `https://picsum.photos/${imageWidth}/${viewportHeight}.webp`;
+    const _ = document.body;
+    const slider = _.firstElementChild;
+    _.style.backgroundImage = `url(${imageURL})`;
+    slider.max = Math.floor(
+      isPortrait ?
+        ((innerHeight * aspectRatio) - innerWidth) :
+        ((innerWidth / aspectRatio) - innerHeight)
+    );
+    slider.addEventListener('input', () => {
+      _.style.backgroundPosition =
+        isPortrait ?
+          `-${parseInt(slider.value)}px 0` :
+          `0 -${parseInt(slider.value)}px`;
+    });
+  </script>
 </body>
+
 </html>
